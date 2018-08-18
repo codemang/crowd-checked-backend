@@ -1,24 +1,18 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a rails docker template based on orats.
 
-Things you may want to cover:
+## First Time
 
-* Ruby version
+1. Clone the repo.
 
-* System dependencies
+2. Run `docker-compose up --build`
 
-* Configuration
+3. In a separate terminal
 
-* Database creation
+```
+docker-compose exec --user "$(id -u):$(id -g)" website rails db:reset
+docker-compose exec --user "$(id -u):$(id -g)" website rails db:migrate
+```
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+4. Visit localhost:3000
