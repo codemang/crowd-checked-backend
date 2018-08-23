@@ -50,6 +50,8 @@ gem 'bootstrap-sass', '~> 3.3'
 # Use Font Awesome Rails for Font Awesome icons
 gem 'font-awesome-rails', '~> 4.7'
 
+gem 'rack-cors'
+
 # Use Bootsnap to improve startup times
 # gem 'bootsnap', '>= 1.1.0', require: false
 
