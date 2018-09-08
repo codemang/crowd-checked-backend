@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'pages#home'
+  root 'launch#index'
   namespace :api do
     resources :highlights
   end

@@ -1,0 +1,24 @@
+
+<div class='page-container'>
+  <h3 class='page-title'>Trending Articles</h3>
+
+  <% @highlights.each do |highlight| %>
+    <div class='highlight-container'>
+      <a class='highlight-title' href="<%= highlight['url'] %>" target='_blank'>
+        <%= highlight['article_title'] %>
+      </a>
+      <div class='highlight-site'>
+        <%= highlight['hostname'] %>
+      </div>
+      <span class='highlight-highlight-count'>
+        <%= highlight['highlight_count'] %> Highlights,
+      </span>
+      <span class='highlight-comment-count'>
+        <%= highlight['comment_count'] %> Comments
+      </span>
+      <div class='highlight-last-timestamp'>
+        Last Comment Posted: <%= highlight['last_comment_date'] %>
+      </div>
+    </div>
+  <% end %>
+</div>

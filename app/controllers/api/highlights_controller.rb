@@ -14,7 +14,7 @@ class Api::HighlightsController < ApplicationController
     # TOOD: Fix highlightedId vs highlightId
     highlight_id = params[:highlightedId]
     if !highlight_id
-      highlight = Highlight.create!(body: params[:highlightedText], url: params[:url])
+      highlight = Highlight.create!(body: params[:highlightedText], url: params[:url], article_title: params[:articleTitle])
       highlight_id = highlight.id
     end
     Comment.create!(highlight_id: highlight_id, comment: params[:comment], username: params[:username])
