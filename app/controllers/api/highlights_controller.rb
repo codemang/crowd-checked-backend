@@ -4,11 +4,7 @@ class Api::HighlightsController < ApplicationController
   def index
     response = Highlight.includes(:comments).where("url LIKE '%#{params[:url]}%'").each_with_object({}) do |highlight, memo|
       memo[:highlights] ||= []
-      memo[:highlights] << {
-        body: highlight.body,
-        id: highlight.id,
-        comments: highlight.comments
-      }
+      memo[:highlights] << json_highlight(highlight)
     end
 
     render json: {response: response}
@@ -22,6 +18,16 @@ class Api::HighlightsController < ApplicationController
       highlight_id = highlight.id
     end
     Comment.create!(highlight_id: highlight_id, comment: params[:comment], username: params[:username])
-    render json: {highlight: highlight}
+    render json: {highlight: json_highlight(highlight.reload)}
+  end
+
+  private
+
+  def json_highlight(highlight)
+    {
+      body: highlight.body,
+      id: highlight.id,
+      comments: highlight.comments
+    }
   end
 end
