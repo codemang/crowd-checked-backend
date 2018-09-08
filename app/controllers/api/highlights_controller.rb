@@ -18,7 +18,7 @@ class Api::HighlightsController < ApplicationController
       highlight_id = highlight.id
     end
     Comment.create!(highlight_id: highlight_id, comment: params[:comment], username: params[:username])
-    render json: {highlight: json_highlight(highlight.reload)}
+    render json: {highlight: json_highlight(Highlight.find(highlight_id))}
   end
 
   private
