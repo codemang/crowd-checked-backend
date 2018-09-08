@@ -15,8 +15,13 @@ class Api::HighlightsController < ApplicationController
   end
 
   def create
-    highlight = Highlight.create!(body: params[:highlightedText], url: params[:url])
-    Comment.create!(highlight: highlight, comment: params[:comment])
+    # TOOD: Fix highlightedId vs highlightId
+    highlight_id = params[:highlightedId]
+    if !highlight_id
+      highlight = Highlight.create!(body: params[:highlightedText], url: params[:url])
+      highlight_id = highlight.id
+    end
+    Comment.create!(highlight_id: highlight_id, comment: params[:comment])
     render json: {highlight: highlight}
   end
 end
