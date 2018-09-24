@@ -52,6 +52,8 @@ gem 'font-awesome-rails', '~> 4.7'
 
 gem 'rack-cors'
 
+gem 'devise'
+
 # Use Bootsnap to improve startup times
 # gem 'bootsnap', '>= 1.1.0', require: false
 
