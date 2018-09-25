@@ -1,5 +1,6 @@
 class Api::HighlightsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :authenticate_extension_user
 
   def index
     response = Highlight.includes(:comments).where("url LIKE '%#{params[:url]}%'").each_with_object({}) do |highlight, memo|
@@ -16,14 +17,19 @@ class Api::HighlightsController < ApplicationController
 
     highlight_id = highlighted_data[:highlightId]
     if !highlight_id
-      highlight = Highlight.create!(body: highlighted_data[:highlightedText], url: params[:url], article_title: params[:articleTitle])
+      highlight = Highlight.create!(
+        body: highlighted_data[:highlightedText],
+        url: params[:url],
+        article_title: params[:articleTitle],
+        user_id: current_extension_user.id
+      )
       highlight_id = highlight.id
     end
 
     comment = Comment.create!(
       highlight_id: highlight_id,
       content: comment_data[:content],
-      user_id: User.last.id,
+      user_id: current_extension_user.id,
       parent: comment_data[:parent]
     )
     render json: {comment: json_comment(comment)}
@@ -47,7 +53,7 @@ class Api::HighlightsController < ApplicationController
       id: comment.id,
       created: comment.created_at,
       content: comment.content,
-      fullname: comment.user.username,
+      fullname: comment.user.email.match(/(^.*?)\@/)[1],
       parent: comment.parent,
       upvote_count: 2,
     }
