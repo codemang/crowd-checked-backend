@@ -4,4 +4,14 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :comments
+
+  before_validation :attach_api_token
+
+  validates_presence_of :api_token, on: [:create]
+
+  private
+
+  def attach_api_token
+    self.api_token = SecureRandom.uuid
+  end
 end
