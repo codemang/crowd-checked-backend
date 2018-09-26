@@ -13,26 +13,27 @@ class Api::HighlightsController < ApplicationController
 
   def create
     highlighted_data = params[:highlightedData]
-    comment_data = params[:commentData]
 
-    highlight_id = highlighted_data[:highlightId]
-    if !highlight_id
-      highlight = Highlight.create!(
+    highlight = if !highlighted_data[:highlightId]
+      Highlight.create!(
         body: highlighted_data[:highlightedText],
         url: params[:url],
         article_title: params[:articleTitle],
         user_id: current_extension_user.id
       )
-      highlight_id = highlight.id
+    else
+      Highlight.find(highlighted_data[:highlightId])
     end
 
+    comment_data = params[:commentData]
     comment = Comment.create!(
-      highlight_id: highlight_id,
+      highlight_id: highlight.id,
       content: comment_data[:content],
       user_id: current_extension_user.id,
       parent: comment_data[:parent]
     )
-    render json: {comment: json_comment(comment)}
+
+    render json: {highlight: json_highlight(highlight.reload), comment: json_comment(comment)}
   end
 
   private
