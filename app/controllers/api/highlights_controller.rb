@@ -1,6 +1,7 @@
 class Api::HighlightsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_extension_user, except: [:index]
+  before_action :authenticate_extension_user, only: [:index]
+  before_action :require_authenticate_extension_user, except: [:index]
 
   def index
     response = Highlight.includes(:comments).where("url LIKE '%#{params[:url]}%'").each_with_object({}) do |highlight, memo|
@@ -56,7 +57,8 @@ class Api::HighlightsController < ApplicationController
       content: comment.content,
       fullname: comment.user.email.match(/(^.*?)\@/)[1],
       parent: comment.parent,
-      upvote_count: 2,
+      upvote_count: comment.comment_votes.count,
+      userHasUpvoted: comment.comment_votes.where(user_id: current_extension_user.id).present?,
     }
   end
 end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'launch#index'
   namespace :api do
     resources :highlights
+    resource :comment_votes
   end
 
   # devise_for :users, controllers: { sessions: 'users/sessions' }

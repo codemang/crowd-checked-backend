@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
     authenticate_with_http_token do |api_token, options|
       @extension_user = User.find_by(api_token: api_token)
     end
+  end
+
+  def require_authenticate_extension_user
+    authenticate_extension_user
     head :unauthorized if @extension_user.nil?
   end
 
