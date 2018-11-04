@@ -1,6 +1,6 @@
 class Api::HighlightsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_extension_user
+  before_action :authenticate_extension_user, except: [:index]
 
   def index
     response = Highlight.includes(:comments).where("url LIKE '%#{params[:url]}%'").each_with_object({}) do |highlight, memo|
