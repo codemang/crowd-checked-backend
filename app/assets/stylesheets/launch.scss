@@ -12,6 +12,10 @@
   border: 1px solid #d0d0d0;
   border-radius: 5px;
   margin-bottom: 15px;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  background-color: white;
 }
 .highlight-title {
   font-size: 20px;
@@ -21,4 +25,35 @@
   font-size: 17px;
   font-style: italic;
   margin-bottom: 15px;
+}
+
+.navbar {
+  padding: 10px;
+}
+
+.navbar-dark {
+  background-color: #38383a;
+}
+.navbar-brand {
+  color: white;
+  margin-left: 0px !important;
+  font-family: lato;
+  font-style: italic;
+  font-size: 25px !important;
+}
+
+.navbar-nav > li > a.nav-item {
+  color: #f3f3f3;
+  font-size: 16px;
+  &:hover {
+    background: none;
+  }
+}
+.navbar-header img {
+  width: 50px;
+  display: inline-block;
+  float: left;
+}
+body {
+  background-color: #f8f8f8 !important;
 }
