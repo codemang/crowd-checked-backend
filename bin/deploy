@@ -9,6 +9,7 @@ git reset --hard origin/master
 
 echo "\nPrecompiling assets..."
 docker exec server_website_1 rails assets:precompile
+docker exec server_website_1 rake db:migrate
 
 echo "\nShutting down all services..."
 docker-compose down
