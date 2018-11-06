@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Exit early if any command fails
+set -e
+
+echo "Downloading master..."
+git fetch origin
+git reset --hard origin/master
+
+echo "\nPrecompiling assets..."
+docker exec server_website_1 rails assets:precompile
+
+echo "\nShutting down all services..."
+docker-compose down
+
+echo "\nStarting all services..."
+docker-compose up -d website
