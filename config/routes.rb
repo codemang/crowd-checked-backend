@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   devise_scope :user do
     post "users/extension_login", to: "users/sessions#extension_login"
   end
+
+  mount Sidekiq::Web => '/sidekiq'
 end
