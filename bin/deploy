@@ -7,6 +7,14 @@ echo "Downloading master..."
 git fetch origin
 git reset --hard origin/master
 
+echo "\nBuilding new image"
+docker-compose build
+
+# Needed when we added haml to the gemfile
+echo "\nRestarting service so that we precompile new assets"
+docker-compose down
+docker-compose up -d website
+
 echo "\nPrecompiling assets..."
 docker exec server_website_1 rails assets:precompile
 docker exec server_website_1 rake db:migrate
