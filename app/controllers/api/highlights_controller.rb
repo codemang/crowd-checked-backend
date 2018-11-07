@@ -34,6 +34,7 @@ class Api::HighlightsController < ApplicationController
       parent: comment_data[:parent]
     )
 
+    NotificationWorker.perform_async(comment.id)
     render json: {highlight: json_highlight(highlight.reload), comment: json_comment(comment)}
   end
 

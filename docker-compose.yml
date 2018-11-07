@@ -18,6 +18,7 @@ services:
     depends_on:
       - 'postgres'
       - 'redis'
+      - 'sidekiq'
       - 'nginx-proxy'
       - 'letsencrypt-nginx-proxy-companion'
     build: .

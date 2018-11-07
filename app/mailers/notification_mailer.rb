@@ -1,8 +1,9 @@
 class NotificationMailer < ApplicationMailer
 
-  default from: 'Kaijo Notifications <notifications@mail.kaijo.io>'
+  default from: 'CrowdChecked Alert <notifications@crowdchecked.com>'
 
-  def response_notification(user_id)
-    mail to: User.find(user_id).email, subject: 'Incident notification'
+  def mail_for_comment(comment_id)
+    @comment = Comment.find(comment_id)
+    mail to: @comment.user.email, subject: 'Someone replied to your comment!'
   end
 end

@@ -30,13 +30,12 @@ module RailsDockerTemplate
     # Action mailer settings.
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
-      address:              ENV['SMTP_ADDRESS'],
-      port:                 ENV['SMTP_PORT'].to_i,
-      domain:               ENV['SMTP_DOMAIN'],
-      user_name:            ENV['SMTP_USERNAME'],
-      password:             ENV['SMTP_PASSWORD'],
-      authentication:       ENV['SMTP_AUTH'],
-      enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] == 'true'
+      authentication: :plain,
+      address: 'smtp.mailgun.org',
+      port: 587,
+      domain: ENV['MAILGUN_DOMAIN'],
+      user_name: ENV['MAILGUN_USERNAME'],
+      password: ENV['MAILGUN_PASSWORD'],
     }
 
     config.action_mailer.default_url_options = {
