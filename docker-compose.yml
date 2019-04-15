@@ -1,29 +1,27 @@
 version: '2'
 
 services:
-  postgres:
+  crowd-checked-postgres:
     image: 'postgres:10.3-alpine'
     volumes:
-      - 'postgres:/var/lib/postgresql/data'
+      - 'crowd-checked-postgres:/var/lib/postgresql/data'
     env_file:
       - '.env'
 
-  redis:
+  crowd-checked-redis:
     image: 'redis:4.0-alpine'
     command: redis-server --requirepass yourpassword
     volumes:
-      - 'redis:/data'
+      - 'crowd-checked-redis:/data'
 
   website:
     depends_on:
-      - 'postgres'
-      - 'redis'
-      - 'sidekiq'
-      - 'nginx-proxy'
-      - 'letsencrypt-nginx-proxy-companion'
+      - 'crowd-checked-postgres'
+      - 'crowd-checked-redis'
+      - 'crowd-checked-sidekiq'
     build: .
     ports:
-      - '3000:3000'
+      - '3002:3000'
     expose:
       - '3000'
     volumes:
@@ -35,27 +33,12 @@ services:
       - VIRTUAL_HOST=crowdchecked.com,www.crowdchecked.com
       - LETSENCRYPT_HOST=crowdchecked.com,www.crowdchecked.com
       - LETSENCRYPT_EMAIL=admin@crowdchecked.com
-      - VIRTUAL_PORT=3000
+      - VIRTUAL_PORT=3002
 
-  website-dev:
+  crowd-checked-sidekiq:
     depends_on:
-      - 'postgres'
-      - 'redis'
-      - 'sidekiq'
-    build: .
-    ports:
-      - '3000:3000'
-    expose:
-      - '3000'
-    volumes:
-      - '.:/app'
-    env_file:
-      - '.env'
-
-  sidekiq:
-    depends_on:
-      - 'postgres'
-      - 'redis'
+      - 'crowd-checked-postgres'
+      - 'crowd-checked-redis'
     build: .
     command: sidekiq -C config/sidekiq.yml.erb
     volumes:
@@ -63,46 +46,9 @@ services:
     env_file:
       - '.env'
 
-  cable:
-    depends_on:
-      - 'redis'
-    build: .
-    command: puma -p 28080 cable/config.ru
-    ports:
-      - '28080:28080'
-    volumes:
-      - '.:/app'
-    env_file:
-      - '.env'
-
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /root/nginx/nginx-data/certs:/etc/nginx/certs:ro
-      - /root/nginx/nginx-data/vhost.d:/etc/nginx/vhost.d
-      - /root/nginx/nginx-data/html:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    labels:
-      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
-
-  letsencrypt-nginx-proxy-companion:
-    restart: always
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-nginx-proxy-companion
-    volumes_from:
-      - nginx-proxy
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/root/nginx/nginx-data/certs:/etc/nginx/certs:rw"
-
 volumes:
-  redis:
-  postgres:
+  crowd-checked-redis:
+  crowd-checked-postgres:
 
 networks:
   default:
